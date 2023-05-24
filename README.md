@@ -1,2 +1,2 @@
 # GhostGame
-# A 206 Project
+## A 206 Project
