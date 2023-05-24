@@ -7,13 +7,24 @@ void MainWindow::setupUI(){
 
     QGridLayout *layout = new QGridLayout(centralWidget);   //for the main gridlayout(we don't use grid so much so don't care about that)
     QPalette pal = QPalette();                              //for background
-    pal.setColor(QPalette::Window, Qt::black);
+    //pal.setColor(QPalette::Window, Qt::black);
+    //pal.setStylesSheet("QPalette{background-image: url(:/new/prefix2/background/backgroun.png)}");
+
+
+    QPixmap background(":/background/background/background.png");
+    QSize screenSize = QApplication::primaryScreen()->availableSize();  // get the screen size
+
+    QPixmap scaledImage = background.scaled(screenSize, Qt::KeepAspectRatio);  // scale the image to fit the screen
+
+    pal.setBrush(QPalette::Window, scaledImage);
+
     centralWidget->setAutoFillBackground(true);
     centralWidget->setPalette(pal);
 
     player1 = new QFrame(this);                             //p1
     player1Label = new QLabel(this);                        //p1 vision area
-    player1->setStyleSheet("background-color: red");
+    player1->setStyleSheet("background-color: red; ");
+
     player1Label->setStyleSheet("background-color: rgba(255, 0, 0, 40);");
     //player1->setStyleSheet("QLabel{border-image:url(https://www.pngfind.com/pngs/m/436-4369822_50-x-50-pixel-art-hd-png-download.png)}");
     player1->setFixedSize(50, 50);

@@ -18,7 +18,8 @@ public:
         : QMainWindow(parent)
     {
         setupUI();
-        setFixedSize(900, 600);
+        //900,600
+        setFixedSize(1200, 790);
     }
 
 protected:
