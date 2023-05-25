@@ -23,5 +23,13 @@ qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
+DISTFILES += \
+    enemyBear.png \
+    ghost.png \
+    goodBear5050.png \
+    src/images/enemyBear.png \
+    src/images/ghost.png \
+    src/images/goodBear5050.png
+
 RESOURCES += \
-    background.qrc
+    resource.qrc

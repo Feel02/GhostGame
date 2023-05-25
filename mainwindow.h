@@ -8,6 +8,8 @@
 #include <vector>
 #include <qmath.h>
 #include <QMainWindow>
+#include <QGraphicsPixmapItem>
+#include <QGraphicsItem>
 
 class MainWindow : public QMainWindow
 {
@@ -18,36 +20,35 @@ public:
         : QMainWindow(parent)
     {
         setupUI();
-        //900,600
-        setFixedSize(1200, 790);
+        setFixedSize(900, 600);
     }
 
 protected:
     void keyPressEvent(QKeyEvent *event) override{              //when pressed a key
 
         if (event->key() == Qt::Key_Up){                        //if pressed key is UpArrow
-            movePlayer(player1, 0, -10);                        //(movePlayer is at the bottom of the code)
+            movePlayer(player1, 0, -20);
         }
         else if (event->key() == Qt::Key_W){
-            movePlayer(player2, 0, -10);
+            movePlayer(player2, 0, -20);
         }
         else if (event->key() == Qt::Key_Down){
-            movePlayer(player1, 0, 10);
+            movePlayer(player1, 0, 20);
         }
         else if (event->key() == Qt::Key_S){
-           movePlayer(player2, 0, 10);
+           movePlayer(player2, 0, 20);
         }
         else if (event->key() == Qt::Key_Left){
-            movePlayer(player1, -10, 0);
+            movePlayer(player1, -20, 0);
         }
         else if (event->key() == Qt::Key_A){
-            movePlayer(player2, -10, 0);
+            movePlayer(player2, -20, 0);
         }
         else if (event->key() == Qt::Key_Right){
-            movePlayer(player1, 10, 0);
+            movePlayer(player1, 20, 0);
         }
         else if (event->key() == Qt::Key_D){
-            movePlayer(player2, 10, 0);
+            movePlayer(player2, 20, 0);
         }
     }
 
@@ -55,8 +56,9 @@ private:
 
     QLabel *player1Label;
     QLabel *player2Label;
-    QFrame *player1;
-    QFrame *player2;
+    QLabel *ghostLabel;
+    QLabel *player1;
+    QLabel *player2;
     QFrame *ghost;
 
     int xG,yG;
@@ -66,7 +68,7 @@ private:
 
     void setupUI();
 
-    void movePlayer(QFrame *player, int dx, int dy);
+    void movePlayer(QLabel *player, int dx, int dy);
 
 
     void restartGhost();
