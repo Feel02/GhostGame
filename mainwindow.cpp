@@ -1,4 +1,5 @@
 #include "mainwindow.h"
+#include <QDebug>
 
 void MainWindow::setupUI(){
     srand((unsigned)time(NULL));                            //for the random num
@@ -14,7 +15,7 @@ void MainWindow::setupUI(){
     player1 = new QLabel(this);                             //p1
     player1Label = new QLabel(this);                        //p1 vision area
     //player1->setStyleSheet("background-color: rgba(255, 0, 0, 0);");
-    player1Label->setStyleSheet("background-color: rgba(195, 195, 195, 25);");
+    player1Label->setStyleSheet("background-color: rgba(195, 195, 195, 25);border-radius: 50px;");
     //player1->setStyleSheet("QLabel{border-image:url(https://www.pngfind.com/pngs/m/436-4369822_50-x-50-pixel-art-hd-png-download.png)}");
     player1->setFixedSize(50, 50);
     player1Label->setFixedSize(150,150);
@@ -28,7 +29,7 @@ void MainWindow::setupUI(){
     player2 = new QLabel(this);                             //p2
     player2Label = new QLabel(this);
     //player2->setStyleSheet("background-color: rgba(0, 0, 255, 0);");
-    player2Label->setStyleSheet("background-color: rgba(195, 195, 195, 25);");
+    player2Label->setStyleSheet("background-color: rgba(195, 195, 195, 25);border-radius: 50px;");
     player2->setFixedSize(50, 50);
     player2Label->setFixedSize(150,150);
 
@@ -37,13 +38,10 @@ void MainWindow::setupUI(){
     int h2 = player2->height();
     player2->setPixmap(imageTwo.scaled(w2, h2, Qt::KeepAspectRatio));
 
-
-
     ghost = new QFrame(this);                               //ghost
     ghostLabel = new QLabel(this);
     ghost->setStyleSheet("background-color: green");
     ghost->setFixedSize(30, 30);
-
 
     QPixmap imageThree (":/img/src/images/ghost.png");
     int w3 = ghostLabel->width();
@@ -72,7 +70,7 @@ void MainWindow::movePlayer(QLabel *player, int dx, int dy){                    
     player->move(newPos);                                   //move the player to new position
 
                                                             //check if we are over the ghost
-    if(newPos.x() + 40 >= ghost->pos().x() && newPos.x() - 40 <= ghost->pos().x() && newPos.y() + 40 >= ghost->pos().y() && newPos.y() - 40 <= ghost->pos().y()){
+    if(newPos.x() + 50 >= ghost->pos().x() && newPos.x() - 30 <= ghost->pos().x() && newPos.y() + 50 >= ghost->pos().y() && newPos.y() - 30 <= ghost->pos().y()){
         QPoint hold1 = player1->pos();
         QPoint hold2 = player2->pos();
         ghost->setVisible(false);                           //make the ghost invisible
@@ -84,9 +82,13 @@ void MainWindow::movePlayer(QLabel *player, int dx, int dy){                    
         player2Label->move(hold2-QPoint(50,50));
         ghost->move(whereIsGhost());
         ghostLabel->move(whereIsGhost());
+        if(player == player1)
+            pointp1++;
+        else
+            pointp2++;
     }
                                                             //check if we are near to ghost
-    else if(newPos.x() + 80 >= ghost->pos().x() && newPos.x() - 80 <= ghost->pos().x() && newPos.y() + 80 >= ghost->pos().y() && newPos.y() - 80 <= ghost->pos().y()){
+    else if(newPos.x() + 90 >= ghost->pos().x() && newPos.x() - 70 <= ghost->pos().x() && newPos.y() + 90 >= ghost->pos().y() && newPos.y() - 70 <= ghost->pos().y()){
         QPoint hold1 = player1->pos();                      //this line holds the location of players so after ghost became
         QPoint hold2 = player2->pos();                      //visible players do not return back to middle(it works and this is the problem lol)
         ghost->setVisible(false);                            //make the ghost visible
@@ -110,6 +112,7 @@ void MainWindow::movePlayer(QLabel *player, int dx, int dy){                    
         player1Label->move(player1->pos()-QPoint(50,50));
         player2Positions.push_back(newPos);
     }
+    checkGameOver();
 }
 void MainWindow::restartGhost(){                            //random the position
     int randomx = rand() % 850;                             //borders will be changed
@@ -120,5 +123,29 @@ void MainWindow::restartGhost(){                            //random the positio
 QPoint MainWindow::whereIsGhost(){                          //return the QPoint of ghost
     QPoint location = QPoint(xG,yG);
     return location;
+}
+
+void MainWindow::gameOver(int input){
+    flag = true;
+    qDebug()<<input;
+    QLabel* panel = new QLabel();
+    panel->setMinimumSize(900,600);
+    panel->setStyleSheet("background-color: rgba(120, 120, 120, 55);");
+    layout()->addWidget(panel);
+    panel->move(0,0);
+
+    QLabel* panel2 = new QLabel();
+    panel2->setMaximumSize(300,400);
+    panel2->setStyleSheet("background-color: rgba(230, 230, 230, 90);");
+    layout()->addWidget(panel2);
+    panel2->move(300,100);
+}
+void MainWindow::checkGameOver(){
+    if(flag == false){
+        if(pointp1 >= 3)
+            gameOver(1);
+        else if(pointp2 >= 3)
+            gameOver(2);
+    }
 }
 

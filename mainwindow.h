@@ -23,6 +23,8 @@ public:
         setFixedSize(900, 600);
     }
 
+    void checkGameOver();
+    void gameOver(int input);
 protected:
     void keyPressEvent(QKeyEvent *event) override{              //when pressed a key
 
@@ -61,7 +63,9 @@ private:
     QLabel *player2;
     QFrame *ghost;
 
+    bool flag = false;
     int xG,yG;
+    int pointp1 = 0,pointp2 = 0;
 
     std::vector<QPoint> player1Positions;                       //Player 1's location vector
     std::vector<QPoint> player2Positions;                       //Player 2's location vector
@@ -69,7 +73,6 @@ private:
     void setupUI();
 
     void movePlayer(QLabel *player, int dx, int dy);
-
 
     void restartGhost();
 
