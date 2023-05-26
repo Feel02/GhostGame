@@ -14,9 +14,7 @@ void MainWindow::setupUI(){
 
     player1 = new QLabel(this);                             //p1
     player1Label = new QLabel(this);                        //p1 vision area
-    //player1->setStyleSheet("background-color: rgba(255, 0, 0, 0);");
     player1Label->setStyleSheet("background-color: rgba(195, 195, 195, 25);border-radius: 50px;");
-    //player1->setStyleSheet("QLabel{border-image:url(https://www.pngfind.com/pngs/m/436-4369822_50-x-50-pixel-art-hd-png-download.png)}");
     player1->setFixedSize(50, 50);
     player1Label->setFixedSize(150,150);
 
@@ -28,7 +26,6 @@ void MainWindow::setupUI(){
 
     player2 = new QLabel(this);                             //p2
     player2Label = new QLabel(this);
-    //player2->setStyleSheet("background-color: rgba(0, 0, 255, 0);");
     player2Label->setStyleSheet("background-color: rgba(195, 195, 195, 25);border-radius: 50px;");
     player2->setFixedSize(50, 50);
     player2Label->setFixedSize(150,150);
@@ -38,24 +35,19 @@ void MainWindow::setupUI(){
     int h2 = player2->height();
     player2->setPixmap(imageTwo.scaled(w2, h2, Qt::KeepAspectRatio));
 
-    ghost = new QFrame(this);                               //ghost
     ghostLabel = new QLabel(this);
-    ghost->setStyleSheet("background-color: green");
-    ghost->setFixedSize(30, 30);
+    ghostLabel->setFixedSize(30,30);
 
     QPixmap imageThree (":/img/src/images/ghost.png");
     int w3 = ghostLabel->width();
     int h3 = ghostLabel->height();
     ghostLabel->setPixmap(imageThree.scaled(w3, h3, Qt::KeepAspectRatio));
 
-    layout->addWidget(ghost,2,0);
     layout->addWidget(player1,1,0);                         //first one is row, second one is coloumn
     layout->addWidget(player2,0,0);
 
-    ghost->setVisible(false);                               //ghost is invisible
     ghostLabel->setVisible(false);
     restartGhost();                                         //randomly generates x and y
-    ghost->move(whereIsGhost());                            //gives what is this x and y and puts ghost there
     ghostLabel->move(whereIsGhost());
     player1Label->move(QPoint(375,330));
     player2Label->move(QPoint(375,115));
@@ -70,17 +62,15 @@ void MainWindow::movePlayer(QLabel *player, int dx, int dy){                    
     player->move(newPos);                                   //move the player to new position
 
                                                             //check if we are over the ghost
-    if(newPos.x() + 50 >= ghost->pos().x() && newPos.x() - 30 <= ghost->pos().x() && newPos.y() + 50 >= ghost->pos().y() && newPos.y() - 30 <= ghost->pos().y()){
+    if(newPos.x() + 50 >= ghostLabel->pos().x() && newPos.x() - 30 <= ghostLabel->pos().x() && newPos.y() + 50 >= ghostLabel->pos().y() && newPos.y() - 30 <= ghostLabel->pos().y()){
         QPoint hold1 = player1->pos();
         QPoint hold2 = player2->pos();
-        ghost->setVisible(false);                           //make the ghost invisible
         ghostLabel->setVisible(false);
         restartGhost();                                     //and move to ghost somewhere random
         player1->move(hold1);
         player1Label->move(hold1-QPoint(50,50));
         player2->move(hold2);
         player2Label->move(hold2-QPoint(50,50));
-        ghost->move(whereIsGhost());
         ghostLabel->move(whereIsGhost());
         if(player == player1)
             pointp1++;
@@ -88,17 +78,14 @@ void MainWindow::movePlayer(QLabel *player, int dx, int dy){                    
             pointp2++;
     }
                                                             //check if we are near to ghost
-    else if(newPos.x() + 90 >= ghost->pos().x() && newPos.x() - 70 <= ghost->pos().x() && newPos.y() + 90 >= ghost->pos().y() && newPos.y() - 70 <= ghost->pos().y()){
+    else if(newPos.x() + 90 >= ghostLabel->pos().x() && newPos.x() - 70 <= ghostLabel->pos().x() && newPos.y() + 90 >= ghostLabel->pos().y() && newPos.y() - 70 <= ghostLabel->pos().y()){
         QPoint hold1 = player1->pos();                      //this line holds the location of players so after ghost became
         QPoint hold2 = player2->pos();                      //visible players do not return back to middle(it works and this is the problem lol)
-        ghost->setVisible(false);                            //make the ghost visible
-        ghostLabel->setVisible(true);
-        //ghost->hide();
+        ghostLabel->setVisible(ishouldnotdothat);
         player1->move(hold1);                               //move the player back where it was
         player1Label->move(hold1-QPoint(50,50));            //move the vision area abck to player
         player2->move(hold2);                               //do the same for player2
         player2Label->move(hold2-QPoint(50,50));
-        ghost->move(whereIsGhost());                        //and lastly be sure ghost is at the location where it should be
         ghostLabel->move(whereIsGhost());
     }
                                                             //add the Player's location to vector
@@ -126,8 +113,9 @@ QPoint MainWindow::whereIsGhost(){                          //return the QPoint 
 }
 
 void MainWindow::gameOver(int input){
+
     flag = true;
-    qDebug()<<input;
+    ishouldnotdothat = false;
     QLabel* panel = new QLabel();
     panel->setMinimumSize(900,600);
     panel->setStyleSheet("background-color: rgba(120, 120, 120, 55);");
@@ -139,6 +127,17 @@ void MainWindow::gameOver(int input){
     panel2->setStyleSheet("background-color: rgba(230, 230, 230, 90);");
     layout()->addWidget(panel2);
     panel2->move(300,100);
+
+    QLabel* txt = new QLabel();
+    txt->setMaximumSize(300,50);
+    txt->setStyleSheet("QLabel { background-color : gray; color : green;}");
+    txt->setFont(QFont("Times",20));
+    if(input == 1)
+        txt->setText(QString("      Player 1 has won"));
+    else
+        txt->setText(QString("      Player 2 has won"));
+    layout()->addWidget(txt);
+    txt->move(300,50);
 }
 void MainWindow::checkGameOver(){
     if(flag == false){

@@ -10,6 +10,7 @@
 #include <QMainWindow>
 #include <QGraphicsPixmapItem>
 #include <QGraphicsItem>
+#include <QFont>
 
 class MainWindow : public QMainWindow
 {
@@ -64,6 +65,7 @@ private:
     QFrame *ghost;
 
     bool flag = false;
+    bool ishouldnotdothat = true;
     int xG,yG;
     int pointp1 = 0,pointp2 = 0;
 
