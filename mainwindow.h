@@ -12,6 +12,7 @@
 #include <QGraphicsItem>
 #include <QFont>
 
+
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -23,9 +24,9 @@ public:
         setupUI();
         setFixedSize(900, 600);
     }
+public Q_SLOTS:
+     void restartGamee();
 
-    void checkGameOver();
-    void gameOver(int input);
 protected:
     void keyPressEvent(QKeyEvent *event) override{              //when pressed a key
 
@@ -62,7 +63,9 @@ private:
     QLabel *ghostLabel;
     QLabel *player1;
     QLabel *player2;
-    QFrame *ghost;
+
+    QWidget* asd;
+    QWidget* asdd;
 
     bool flag = false;
     bool ishouldnotdothat = true;
@@ -79,5 +82,9 @@ private:
     void restartGhost();
 
     QPoint whereIsGhost();
+
+    void checkGameOver();
+
+    void gameOver(int input);
 };
 #endif // MAINWINDOW_H

@@ -2,6 +2,12 @@
 #include <QDebug>
 
 void MainWindow::setupUI(){
+
+    flag = false;
+    pointp1 = 0;
+    pointp2 = 0;
+    ishouldnotdothat = true;
+
     srand((unsigned)time(NULL));                            //for the random num
     QWidget *centralWidget = new QWidget(this);             //main widget
     setCentralWidget(centralWidget);
@@ -106,6 +112,7 @@ void MainWindow::restartGhost(){                            //random the positio
     int randomy = rand() % 550;                             //probably
     xG = randomx;
     yG = randomy;
+    ghostLabel->move(xG,yG);
 }
 QPoint MainWindow::whereIsGhost(){                          //return the QPoint of ghost
     QPoint location = QPoint(xG,yG);
@@ -138,6 +145,26 @@ void MainWindow::gameOver(int input){
         txt->setText(QString("      Player 2 has won"));
     layout()->addWidget(txt);
     txt->move(300,50);
+
+    asd = new QWidget(this);
+    QPushButton *quit = new QPushButton(asd);
+    quit->setStyleSheet("QLabel {color : blue; font-size: 30px;height: 80px;width: 100px;font: bold;}");
+    quit->setText(QString("Quit"));
+    quit->setFocusPolicy(Qt::NoFocus);
+    connect(quit,SIGNAL(clicked()),this,SLOT(close()));
+
+    asdd = new QWidget(this);
+    QPushButton *playAgain = new QPushButton(asdd);
+    playAgain->setStyleSheet("QLabel {color : blue; font-size: 30px;height: 80px;width: 100px;font: bold;}");
+    playAgain->setText(QString("Play Again"));
+    playAgain->setFocusPolicy(Qt::NoFocus);
+    connect(playAgain,SIGNAL(clicked()),this,SLOT(restartGamee()));
+
+    layout()->addWidget(asd);
+    layout()->addWidget(asdd);
+    asd->move(400,400);
+    asdd->move(400,300);
+
 }
 void MainWindow::checkGameOver(){
     if(flag == false){
@@ -148,3 +175,6 @@ void MainWindow::checkGameOver(){
     }
 }
 
+void MainWindow::restartGamee(){
+    setupUI();
+}
