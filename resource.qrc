@@ -3,5 +3,6 @@
         <file>src/images/enemyBear.png</file>
         <file>src/images/ghost.png</file>
         <file>src/images/goodBear5050.png</file>
+        <file>src/images/start_img.jpeg</file>
     </qresource>
 </RCC>
