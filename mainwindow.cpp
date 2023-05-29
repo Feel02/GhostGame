@@ -164,7 +164,7 @@ void MainWindow::gameOver(int input){
 
     QLabel* txt = new QLabel();
     txt->setMaximumSize(300,50);
-    txt->setStyleSheet("QLabel { background-color : transparent ; color : black;}");
+    txt->setStyleSheet("QLabel { background-color : transparent ; color : white;}");
     txt->setFont(QFont("Arial Black",20));
 
     if(input == 1){
@@ -185,7 +185,7 @@ void MainWindow::gameOver(int input){
 
     }
     layout()->addWidget(txt);
-    txt->move(300,50);
+    txt->move(330,140);
 
     quitLabel = new QWidget(this);
     quitLabel->setFixedSize(150,60);
