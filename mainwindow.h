@@ -11,6 +11,10 @@
 #include <QGraphicsPixmapItem>
 #include <QGraphicsItem>
 #include <QFont>
+#include <QFile>
+#include <QTextStream>
+#include <QPlainTextEdit>
+
 
 class MainWindow : public QMainWindow
 {
@@ -29,6 +33,7 @@ public:
 public Q_SLOTS:
     void restartGamee();
     void changeStartFlag();
+    void closeFile();
 
 protected:
     void keyPressEvent(QKeyEvent *event) override{              //when pressed a key
@@ -104,5 +109,7 @@ private:
     void gameOver(int input);
 
     void restartScoreTable();
+
+
 };
 #endif // MAINWINDOW_H

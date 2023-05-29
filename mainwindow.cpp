@@ -1,6 +1,13 @@
 #include "mainwindow.h"
+#include "printmessage.h"
 #include <QDebug>
 #include <string>
+#include <QFile>
+#include <QTextStream>
+#include <QPlainTextEdit>
+
+
+
 
 void MainWindow::setupUI(){
 
@@ -73,7 +80,7 @@ void MainWindow::setupUI(){
 void MainWindow::movePlayer(QLabel *player, int dx, int dy){                                                           //moveplayer
 
     QPoint newPos = player->pos() + QPoint(dx, dy);         //create the new position
-                                                            //for checking the borders (for the players not the vision area)
+        //for checking the borders (for the players not the vision area)
     newPos.setX(qBound(0, newPos.x(), centralWidget()->width() - player->width()));
     newPos.setY(qBound(0, newPos.y(), centralWidget()->height() - player->height()));
     player->move(newPos);                                   //move the player to new position
@@ -117,9 +124,12 @@ void MainWindow::movePlayer(QLabel *player, int dx, int dy){                    
         player2Positions.push_back(newPos);
     }
 
-    leftScoreBoard->setText(QString("P1 Score: " + (QString::number(pointp1))));
-    rightScoreBoard->setText(QString("P2 Score: " + (QString::number(pointp2))));
+    leftScoreBoard->setText(QString("Wendy: " + (QString::number(pointp1))));
+    rightScoreBoard->setText(QString("Andy: " + (QString::number(pointp2))));
     checkGameOver();
+
+
+
 }
 void MainWindow::restartGhost(){                            //random the position
     int randomx = rand() % 850;                             //borders will be changed
@@ -135,6 +145,8 @@ QPoint MainWindow::whereIsGhost(){                          //return the QPoint 
 
 void MainWindow::gameOver(int input){
 
+
+
     flag = true;
     ishouldnotdothat = false;
     QLabel* panel = new QLabel();
@@ -142,28 +154,43 @@ void MainWindow::gameOver(int input){
     panel->setStyleSheet("background-color: rgba(120, 120, 120, 55);");
     layout()->addWidget(panel);
     panel->move(0,0);
+    //panel->setFocusPolicy(Qt::NoFocus);
 
     QLabel* panel2 = new QLabel();
     panel2->setMaximumSize(300,400);
-    panel2->setStyleSheet("background-color: rgba(230, 230, 230, 90);");
+    panel2->setStyleSheet("background-color: transparent;");
     layout()->addWidget(panel2);
     panel2->move(300,100);
 
     QLabel* txt = new QLabel();
     txt->setMaximumSize(300,50);
-    txt->setStyleSheet("QLabel { background-color : gray; color : green;}");
-    txt->setFont(QFont("Times",20));
-    if(input == 1)
-        txt->setText(QString("      Player 1 has won"));
-    else
-        txt->setText(QString("      Player 2 has won"));
+    txt->setStyleSheet("QLabel { background-color : transparent ; color : white;}");
+    txt->setFont(QFont("Arial Black",20));
+
+    if(input == 1){
+
+        //printMessage(txt, "Wendy has won");  (Whitout typecayting)
+        txt->setText(static_cast<QString>(printMessage("Wendy has won")));
+        QPixmap wendyImage(":/img/src/images/wonWendy.png");
+        wendyImage = wendyImage.scaled(panel->size(), Qt::KeepAspectRatio);
+        panel->setStyleSheet("background-image: url(:/img/src/images/wonWendy.png);");
+
+    }
+    else{
+        //printMessage(txt, "Andy has won"); (Whitout typecayting)
+        txt->setText(static_cast<QString>(printMessage("Andy has won")));
+        QPixmap andyImage(":/img/src/images/wonAndy.png");
+        andyImage = andyImage.scaled(panel->size(), Qt::KeepAspectRatio);
+        panel->setStyleSheet("background-image: url(:/img/src/images/wonAndy.png);");
+
+    }
     layout()->addWidget(txt);
-    txt->move(300,50);
+    txt->move(330,140);
 
     quitLabel = new QWidget(this);
     quitLabel->setFixedSize(150,60);
     QPushButton *quit = new QPushButton(quitLabel);
-    quit->setStyleSheet("color : blue; font-size: 25px;height: 60px;width: 150px;font: bold;");
+    quit->setStyleSheet("color : darkblue; font-size: 25px;height: 60px;width: 150px;font: bold;");
     quit->setText(QString("Quit"));
     quit->setFocusPolicy(Qt::NoFocus);
     connect(quit,SIGNAL(clicked()),this,SLOT(close()));
@@ -171,7 +198,7 @@ void MainWindow::gameOver(int input){
     againLabel = new QWidget(this);
     againLabel->setFixedSize(150,60);
     QPushButton *playAgain = new QPushButton(againLabel);
-    playAgain->setStyleSheet("color : blue; font-size: 25px;height: 60px;width: 150px;font: bold;");
+    playAgain->setStyleSheet("color : darkblue; font-size: 25px;height: 60px;width: 150px;font: bold;");
     playAgain->setText(QString("Play Again"));
     playAgain->setFocusPolicy(Qt::NoFocus);
     connect(playAgain,SIGNAL(clicked()),this,SLOT(restartGamee()));
@@ -181,6 +208,8 @@ void MainWindow::gameOver(int input){
     quitLabel->move(375,300);
     againLabel->move(375,200);
 
+
+
 }
 void MainWindow::checkGameOver(){
     if(flag == false){
@@ -189,24 +218,31 @@ void MainWindow::checkGameOver(){
         else if(pointp2 >= 3)
             gameOver(2);
     }
+
 }
 
 void MainWindow::restartGamee(){
-    setupUI();
-    restartScoreTable();
+    //exception handling
+    try {
+        setupUI();
+        restartScoreTable();
+    } catch (const std::exception& e) {
+        // Handle the exception
+        qDebug() << "An exception occurred: " << e.what();
+    }
 }
 
 void MainWindow::startScreen(){
 
     startButtonThing = new QWidget(this);
-    startButtonThing->setFixedSize(200,70);
-    startButtonThing->move(350,285);
+    startButtonThing->setFixedSize(200,40);
+    startButtonThing->move(350,470);
     startScreenPic = new QLabel();
     startScreenPic->setFixedSize(900,600);
-    QPixmap imageFour (":/img/src/images/start_img.jpeg");
-    startScreenPic->setPixmap(imageFour.scaled(900, 600, Qt::KeepAspectRatio));
+    QPixmap imageFour (":/img/src/images/forest.jpg");
+    startScreenPic->setPixmap(imageFour.scaled(950, 600, Qt::KeepAspectRatio));
     start = new QPushButton(startButtonThing);
-    start->setStyleSheet("color : blue; font-size: 30px;height: 70px;width: 200px;font: bold;");
+    start->setStyleSheet("color : darkblue; font-size: 20px;height: 35px;width: 200px;font: bold;");
     start->setText(QString("START"));
     start->setFocusPolicy(Qt::NoFocus);
     layout()->addWidget(startScreenPic);
@@ -214,6 +250,40 @@ void MainWindow::startScreen(){
     startScreenPic->raise();
     startButtonThing->raise();
     connect(start,SIGNAL(clicked()),this,SLOT(changeStartFlag()));
+
+
+    QPlainTextEdit* textEdit = new QPlainTextEdit(this);
+    textEdit->setFixedSize(650, 380);
+    //txtbox location
+    textEdit->move(130, 65);
+    textEdit->setReadOnly(true); // Set the read-only property to true
+    textEdit->setFocusPolicy(Qt::NoFocus);
+
+    QFont font("Arial Black", 10); // Specify the desired font family and size
+    textEdit->setFont(font);
+
+    // Set the background color to transparent using style sheet
+    //textEdit->setStyleSheet("background-color: transparent;");
+
+    // Set a semi-transparent white background using RGBA color value
+    textEdit->setStyleSheet("background-color: rgba(255, 255, 255, 50);");
+
+
+    QString filePath = ":/story/theLore.txt";
+    QFile file(filePath);
+
+    if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        QTextStream in(&file);
+        QString content = in.readAll();
+        textEdit->setPlainText(content);
+        file.close();
+    } else {
+        qDebug() << "The file could not be opened!";
+    }
+
+
+    //connect(start, SIGNAL(clicked()), this, SLOT(changeStartFlag()));
+    connect(start, SIGNAL(clicked()), this, SLOT(closeFile()));
 
 }
 
@@ -223,6 +293,8 @@ void MainWindow::changeStartFlag(){
     startScreenPic->setVisible(false);
 
     restartScoreTable();
+    restartGamee();
+    closeFile();
 }
 
 void MainWindow::restartScoreTable(){
@@ -242,3 +314,14 @@ void MainWindow::restartScoreTable(){
     layout()->addWidget(rightScoreBoard);
     rightScoreBoard->move(750,0);
 }
+
+void MainWindow::closeFile() {
+    QFile file(":/story/theLore.txt");  // Define the file variable
+    if (file.isOpen()) {                // Close if file is open
+        file.close();
+    }
+}
+
+
+
+

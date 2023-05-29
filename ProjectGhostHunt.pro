@@ -1,4 +1,4 @@
-QT       += core gui
+QT += core gui
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -13,7 +13,8 @@ SOURCES += \
     mainwindow.cpp
 
 HEADERS += \
-    mainwindow.h
+    mainwindow.h \
+    printmessage.h
 
 FORMS += \
     mainwindow.ui
@@ -32,4 +33,6 @@ DISTFILES += \
     src/images/goodBear5050.png
 
 RESOURCES += \
-    resource.qrc
+    resource.qrc \
+    sound.qrc \
+    story.qrc
