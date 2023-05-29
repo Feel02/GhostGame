@@ -11,11 +11,24 @@
     label->setText(QString::fromStdString(message));
 }
 */
+class printmessage: public QLabel{
 
-QString printMessage(const std::string& message = "GAME OVER") {
+public:
+    printmessage(){
 
-    return QString::fromStdString(message);
-}
+    }
+
+    inline QString convert(const std::string& message){
+        return QString::fromStdString(message);
+    }
+
+    QString printMessage(const std::string& message = "GAME OVER"){
+        return convert(message);
+    }
+
+};
+
+
 
 
 #endif // PRINTMESSAGE_H

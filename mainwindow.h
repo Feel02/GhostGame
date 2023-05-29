@@ -94,6 +94,8 @@ private:
     std::vector<QPoint> player1Positions;                       //Player 1's location vector
     std::vector<QPoint> player2Positions;                       //Player 2's location vector
 
+    QPlainTextEdit* textEdit;
+
     void setupUI();
 
     void movePlayer(QLabel *player, int dx, int dy);

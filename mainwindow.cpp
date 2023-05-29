@@ -6,9 +6,6 @@
 #include <QTextStream>
 #include <QPlainTextEdit>
 
-
-
-
 void MainWindow::setupUI(){
 
     flag = false;
@@ -124,20 +121,23 @@ void MainWindow::movePlayer(QLabel *player, int dx, int dy){                    
         player2Positions.push_back(newPos);
     }
 
-    leftScoreBoard->setText(QString("Wendy: " + (QString::number(pointp1))));
-    rightScoreBoard->setText(QString("Andy: " + (QString::number(pointp2))));
+    leftScoreBoard->setText(QString("Andy: " + (QString::number(pointp2))));
+    rightScoreBoard->setText(QString("Wendy: " + (QString::number(pointp1))));
     checkGameOver();
-
-
-
 }
+
 void MainWindow::restartGhost(){                            //random the position
-    int randomx = rand() % 850;                             //borders will be changed
-    int randomy = rand() % 550;                             //probably
-    xG = randomx;
-    yG = randomy;
+    int* randomx;                                           //Explicit Heap-Dynamic Variables
+    randomx = new int(rand() % 850);
+    int* randomy;
+    randomy = new int(rand() % 550);
+    xG = *randomx;
+    yG = *randomy;
+    delete randomx;
+    delete randomy;
     ghostLabel->move(xG,yG);
 }
+
 QPoint MainWindow::whereIsGhost(){                          //return the QPoint of ghost
     QPoint location = QPoint(xG,yG);
     return location;
@@ -145,7 +145,7 @@ QPoint MainWindow::whereIsGhost(){                          //return the QPoint 
 
 void MainWindow::gameOver(int input){
 
-
+    printmessage* mes = new printmessage();
 
     flag = true;
     ishouldnotdothat = false;
@@ -164,13 +164,13 @@ void MainWindow::gameOver(int input){
 
     QLabel* txt = new QLabel();
     txt->setMaximumSize(300,50);
-    txt->setStyleSheet("QLabel { background-color : transparent ; color : white;}");
+    txt->setStyleSheet("QLabel { background-color : transparent ; color : black;}");
     txt->setFont(QFont("Arial Black",20));
 
     if(input == 1){
 
         //printMessage(txt, "Wendy has won");  (Whitout typecayting)
-        txt->setText(static_cast<QString>(printMessage("Wendy has won")));
+        txt->setText(static_cast<QString>(mes->printMessage("Wendy has won")));
         QPixmap wendyImage(":/img/src/images/wonWendy.png");
         wendyImage = wendyImage.scaled(panel->size(), Qt::KeepAspectRatio);
         panel->setStyleSheet("background-image: url(:/img/src/images/wonWendy.png);");
@@ -178,14 +178,14 @@ void MainWindow::gameOver(int input){
     }
     else{
         //printMessage(txt, "Andy has won"); (Whitout typecayting)
-        txt->setText(static_cast<QString>(printMessage("Andy has won")));
+        txt->setText(static_cast<QString>(mes->printMessage("Andy has won")));
         QPixmap andyImage(":/img/src/images/wonAndy.png");
         andyImage = andyImage.scaled(panel->size(), Qt::KeepAspectRatio);
         panel->setStyleSheet("background-image: url(:/img/src/images/wonAndy.png);");
 
     }
     layout()->addWidget(txt);
-    txt->move(330,140);
+    txt->move(300,50);
 
     quitLabel = new QWidget(this);
     quitLabel->setFixedSize(150,60);
@@ -252,7 +252,7 @@ void MainWindow::startScreen(){
     connect(start,SIGNAL(clicked()),this,SLOT(changeStartFlag()));
 
 
-    QPlainTextEdit* textEdit = new QPlainTextEdit(this);
+    textEdit = new QPlainTextEdit(this);
     textEdit->setFixedSize(650, 380);
     //txtbox location
     textEdit->move(130, 65);
@@ -267,7 +267,6 @@ void MainWindow::startScreen(){
 
     // Set a semi-transparent white background using RGBA color value
     textEdit->setStyleSheet("background-color: rgba(255, 255, 255, 50);");
-
 
     QString filePath = ":/story/theLore.txt";
     QFile file(filePath);
@@ -291,10 +290,8 @@ void MainWindow::changeStartFlag(){
     startFlag=true;
     start->setVisible(false);
     startScreenPic->setVisible(false);
-
     restartScoreTable();
-    restartGamee();
-    closeFile();
+    textEdit->setVisible(false);
 }
 
 void MainWindow::restartScoreTable(){
@@ -302,7 +299,7 @@ void MainWindow::restartScoreTable(){
     leftScoreBoard->setMaximumSize(150,80);
     leftScoreBoard->setStyleSheet("QLabel { color : white;}");
     leftScoreBoard->setFont(QFont("Times",16));
-    leftScoreBoard->setText(QString("P1 Score: " + QString::number(pointp1)));
+    leftScoreBoard->setText(QString("Andy: " + QString::number(pointp1)));
     layout()->addWidget(leftScoreBoard);
     leftScoreBoard->move(20,0);
 
@@ -310,7 +307,7 @@ void MainWindow::restartScoreTable(){
     rightScoreBoard->setMaximumSize(150,80);
     rightScoreBoard->setStyleSheet("QLabel { color : white;}");
     rightScoreBoard->setFont(QFont("Times",16));
-    rightScoreBoard->setText(QString("P2 Score: " + QString::number(pointp2)));
+    rightScoreBoard->setText(QString("Wendy: " + QString::number(pointp2)));
     layout()->addWidget(rightScoreBoard);
     rightScoreBoard->move(750,0);
 }
