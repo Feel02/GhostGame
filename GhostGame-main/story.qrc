@@ -1,5 +1,0 @@
-<RCC>
-    <qresource prefix="/story">
-        <file>theLore.txt</file>
-    </qresource>
-</RCC>

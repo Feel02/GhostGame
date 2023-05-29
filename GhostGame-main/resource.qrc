@@ -1,8 +1,0 @@
-<RCC>
-    <qresource prefix="/img">
-        <file>src/images/enemyBear.png</file>
-        <file>src/images/ghost.png</file>
-        <file>src/images/goodBear5050.png</file>
-        <file>src/images/forest.jpg</file>
-    </qresource>
-</RCC>
