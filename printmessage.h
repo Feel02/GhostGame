@@ -17,6 +17,9 @@ public:
     printmessage(){
 
     }
+    ~printmessage(){
+
+    }
 
     inline QString convert(const std::string& message){
         return QString::fromStdString(message);
